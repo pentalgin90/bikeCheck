@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: bike_theft_check
+  liquibase:
+    change-log: classpath://db/changelog/changelog.json
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_URL:localhost:5432/postgres}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    hikari:
+      schema: ${POSTGRES_SCHEMA:bike}
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      pool-name: datasource-pool-bike
+    initialization-mode: always
+  jpa:
+    show-sql: true
+    database: postgresql
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+          lob:
+            non_contextual_creation: true
+    generate-ddl: false
+    open-in-view: off
+telegram:
+  botPath: ${TGBOT_PATH:https://9b0f-88-118-182-80.ngrok-free.app/}
+  botUsername: ${TGBOT_BOTNAME:BikeTheftCheck}
+  botToken: ${TGBOT_TOKEN:6297562865:AAHmoQfoV_d_0u6Om178U5U9ncyOIRM4egk}
