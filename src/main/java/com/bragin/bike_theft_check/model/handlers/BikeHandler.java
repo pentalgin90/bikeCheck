@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -94,10 +95,14 @@ public class BikeHandler {
         List<PhotoSize> photo = message.getPhoto();
         String fileId = photo.get(0).getFileId();
         BikeDto bike = bikeCash.getBikeMap().get(userId);
-        bikeService.createReport(bike);
+        BikeDto report = bikeService.createReport(bike);
         bikeCash.saveBikeCash(userId, new BikeDto());
         botStateCash.saveBotState(userId, BotState.START);
-        return menuService.getMainMenuMessage(message.getChatId(), "Report was saved", userId);
+        if (Objects.nonNull(report)) {
+            return menuService.getMainMenuMessage(message.getChatId(), "Report was saved", userId);
+        } else {
+            return menuService.getMainMenuMessage(message.getChatId(), "Report was not saved", userId);
+        }
     }
 
     public BotApiMethod<?> findBikeByNumber(Message message, long userId) {
