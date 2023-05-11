@@ -1,9 +1,7 @@
 package com.bragin.bike_theft_check.model.handlers;
 
-import com.bragin.bike_theft_check.configuration.TelegramBot;
 import com.bragin.bike_theft_check.dto.BikeDto;
 import com.bragin.bike_theft_check.model.BotState;
-import com.bragin.bike_theft_check.model.TelegramFacade;
 import com.bragin.bike_theft_check.services.BikeService;
 import com.bragin.bike_theft_check.services.MenuService;
 import com.bragin.bike_theft_check.services.cash.BikeCash;
@@ -13,12 +11,9 @@ import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
