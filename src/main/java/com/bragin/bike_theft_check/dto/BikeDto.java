@@ -17,5 +17,4 @@ public class BikeDto {
     private String modelName;
     private String description;
     private Boolean wanted;
-    private byte[] image;
 }

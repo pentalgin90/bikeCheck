@@ -37,7 +37,5 @@ public class BikeEntity {
     private String description;
     @Column(name = "wanted")
     private Boolean wanted = false;
-    @Column(name = "image", length = 1000)
-    private byte[] image;
 
 }
