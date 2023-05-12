@@ -69,14 +69,31 @@
                       "nullable": false
                     }
                   }
-                },
-                {
-                  "column": {
-                    "name": "image",
-                    "type": "bytea"
-                  }
                 }
               ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "changeSet": {
+        "id": "202312051141",
+        "author": "bragin",
+        "changes": [
+          {
+            "createIndex": {
+              "columns": [
+                {
+                  "column": {
+                    "name": "frame_number"
+                  }
+                }
+              ],
+              "indexName": "idx_frame_number",
+              "schemaName": "bike",
+              "tableName": "thefted_bikes",
+              "unique": true
             }
           }
         ]

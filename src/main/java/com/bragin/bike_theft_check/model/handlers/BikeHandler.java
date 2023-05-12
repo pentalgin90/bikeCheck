@@ -6,6 +6,7 @@ import com.bragin.bike_theft_check.services.BikeService;
 import com.bragin.bike_theft_check.services.MenuService;
 import com.bragin.bike_theft_check.services.cash.BikeCash;
 import com.bragin.bike_theft_check.services.cash.BotStateCash;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.apache.logging.log4j.util.Strings;
@@ -33,7 +34,11 @@ public class BikeHandler {
             Model name: %s
             Description: %s
             Wanted: %b
+            %s
             """;
+
+    private static final String NOT_FIND = EmojiParser.parseToUnicode(":white_check_mark:");
+    private static final String FIND = EmojiParser.parseToUnicode(":x:");
     public BotApiMethod<?> enterFrameNumber(Message message, long userId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(message.getChatId()));
@@ -108,15 +113,20 @@ public class BikeHandler {
     public BotApiMethod<?> findBikeByNumber(Message message, long userId) {
         String frameNumber = message.getText();
         BikeDto bike = bikeService.findBikeByFrameNumber(frameNumber);
-        botStateCash.saveBotState(userId, BotState.START);
-        StringFormattedMessage stringFormattedMessage = new StringFormattedMessage(
-                BIKE_MESSAGE_PATTERN,
-                bike.getFrameNumber(),
-                bike.getVendor(),
-                bike.getModelName(),
-                bike.getDescription(),
-                bike.getWanted()
-        );
-        return menuService.getMainMenuMessage(message.getChatId(), stringFormattedMessage.toString(), userId);
+        if (Objects.nonNull(bike)) {
+            botStateCash.saveBotState(userId, BotState.START);
+            StringFormattedMessage stringFormattedMessage = new StringFormattedMessage(
+                    BIKE_MESSAGE_PATTERN,
+                    bike.getFrameNumber(),
+                    bike.getVendor(),
+                    bike.getModelName(),
+                    bike.getDescription(),
+                    bike.getWanted(),
+                    FIND
+            );
+            return menuService.getMainMenuMessage(message.getChatId(), stringFormattedMessage.toString(), userId);
+        } else {
+            return menuService.getMainMenuMessage(message.getChatId(), NOT_FIND, userId);
+        }
     }
 }

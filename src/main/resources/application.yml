@@ -27,6 +27,6 @@ spring:
     generate-ddl: false
     open-in-view: off
 telegram:
-  botPath: ${TGBOT_PATH:https://9b0f-88-118-182-80.ngrok-free.app/}
+  botPath: ${TGBOT_PATH:https://f2c6-88-118-182-80.ngrok-free.app}
   botUsername: ${TGBOT_BOTNAME:BikeTheftCheck}
   botToken: ${TGBOT_TOKEN:6297562865:AAHmoQfoV_d_0u6Om178U5U9ncyOIRM4egk}
