@@ -20,6 +20,14 @@ public class MessageHandler {
     private final BikeCash bikeCash;
     private final BikeHandler bikeHandler;
 
+    private static final String MESSAGE_INFO =
+            """
+            This bot was created to check the bike for theft. You can also report stolen bikes.
+            The check is based on the frame number.
+            For cooperation, you can write here: dmitrii.bragin90@gmail.com
+            !!!Do not leave your bike unattended!!!
+            """;
+
     public BotApiMethod<?> handle(Message message, BotState botState) {
         long userId = message.getFrom().getId();
         long chatId = message.getChatId();
@@ -27,6 +35,10 @@ public class MessageHandler {
         sendMessage.setChatId(String.valueOf(chatId));
         botStateCash.saveBotState(userId, botState);
         return switch (botState){
+            case INFO ->  {
+                sendMessage.setText(MESSAGE_INFO);
+                yield sendMessage;
+            }
             case START -> menuService.getMainMenuMessage(message.getChatId(),
                     "Use general menu", userId);
             case CREATE -> {

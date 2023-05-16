@@ -39,20 +39,14 @@ public class TelegramFacade {
     private BotApiMethod<?> handleInputMessage(Message message) {
         BotState botState;
         String inputMsg = message.getText();
-        switch (inputMsg) {
-            case "/start":
-                botState = BotState.START;
-                break;
-            case "Add":
-                botState = BotState.CREATE;
-                break;
-            case "Find":
-                botState = BotState.FIND_BIKE;
-                break;
-            default:
-                botState = botStateCash.getBotStateMap().get(message.getFrom().getId()) == null?
-                        BotState.START: botStateCash.getBotStateMap().get(message.getFrom().getId());
-        }
+        botState = switch (inputMsg) {
+            case "/info" -> BotState.INFO;
+            case "/start" -> BotState.START;
+            case "Add" -> BotState.CREATE;
+            case "Find" -> BotState.FIND_BIKE;
+            default -> botStateCash.getBotStateMap().get(message.getFrom().getId()) == null ?
+                    BotState.START : botStateCash.getBotStateMap().get(message.getFrom().getId());
+        };
         //we pass the corresponding state to the handler
         //the corresponding method will be called
         return messageHandler.handle(message, botState);

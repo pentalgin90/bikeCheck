@@ -9,5 +9,6 @@ public enum BotState {
     ENTER_WANTED,
     FIND_BIKE,
     START,
-    ENTER_FRAME_NUMBER_FOR_SEARCH;
+    ENTER_FRAME_NUMBER_FOR_SEARCH,
+    INFO;
 }
