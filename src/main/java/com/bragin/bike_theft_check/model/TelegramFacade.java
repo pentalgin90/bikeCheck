@@ -44,6 +44,7 @@ public class TelegramFacade {
             case "/start" -> BotState.START;
             case "Add" -> BotState.CREATE;
             case "Find" -> BotState.FIND_BIKE;
+            case "My bikes" -> BotState.MY_BIKES;
             default -> botStateCash.getBotStateMap().get(message.getFrom().getId()) == null ?
                     BotState.START : botStateCash.getBotStateMap().get(message.getFrom().getId());
         };

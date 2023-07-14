@@ -5,11 +5,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jdk.jfr.Timestamp;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -33,9 +40,14 @@ public class BikeEntity {
     @Column(name = "date_created")
     @Timestamp
     private LocalDateTime dateCreated;
+    @Column(name = "date_update")
+    @Timestamp
+    private LocalDateTime dateUpdate;
     @Column(name = "description")
     private String description;
     @Column(name = "wanted")
     private Boolean wanted = false;
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
 }

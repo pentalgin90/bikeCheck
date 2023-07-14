@@ -3,8 +3,10 @@ package com.bragin.bike_theft_check.configuration;
 import com.bragin.bike_theft_check.configuration.props.TelegramBotProperties;
 import com.bragin.bike_theft_check.model.TelegramFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
 @Configuration
@@ -25,5 +27,14 @@ public class AppConfig {
         bot.setBotPath(properties.getBotPath());
 
         return bot;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages");
+        messageSource.setCacheSeconds(3600);
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 }

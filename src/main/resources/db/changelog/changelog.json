@@ -57,6 +57,12 @@
                 },
                 {
                   "column": {
+                    "name": "date_update",
+                    "type": "timestamp"
+                  }
+                },
+                {
+                  "column": {
                     "name": "description",
                     "type": "varchar"
                   }
@@ -94,6 +100,59 @@
               "schemaName": "bike",
               "tableName": "thefted_bikes",
               "unique": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "changeSet": {
+        "id": "202329051001",
+        "author": "bragin",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "bike_user",
+              "columns": [
+                {
+                  "column": {
+                    "name": "user_id",
+                    "type": "bigint",
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "addColumn": {
+              "columns": [
+                {
+                  "column": {
+                    "name": "user_id",
+                    "type": "bigint"
+                  }
+                }
+              ],
+              "schemaName": "bike",
+              "tableName": "thefted_bikes"
+            }
+          },
+          {
+            "addForeignKeyConstraint": {
+              "baseColumnNames": "user_id",
+              "baseTableName": "thefted_bikes",
+              "baseSchemaName": "bike",
+              "constraintName": "fk_bike_user",
+              "onDelete": "CASCADE",
+              "onUpdate": "RESTRICT",
+              "referencedColumnNames": "user_id",
+              "referencedTableName": "bike_user",
+              "referencedTableSchemaName": "bike",
+              "validate": true
             }
           }
         ]
