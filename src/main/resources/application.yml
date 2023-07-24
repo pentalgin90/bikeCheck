@@ -25,10 +25,6 @@ spring:
             non_contextual_creation: true
     generate-ddl: false
     open-in-view: off
-  task:
-    scheduling:
-      pool:
-        size: 5
 cron:
   rss: 0 30 3 * * ?
   parser: 0 0 4 * * ?
