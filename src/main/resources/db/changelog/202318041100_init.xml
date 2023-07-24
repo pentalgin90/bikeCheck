@@ -1,0 +1,63 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="202318041100" author="bragin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="thefted_bikes"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE thefted_bikes
+            (
+                id           UUID PRIMARY KEY,
+                frame_number varchar,
+                vendor       varchar,
+                model_name   varchar,
+                date_created timestamp,
+                description  varchar,
+                status       varchar,
+                link         varchar,
+                user_id      bigint
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="202312051141" author="bragin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_frame_number"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE INDEX idx_frame_number ON thefted_bikes (frame_number);
+        </sql>
+    </changeSet>
+
+    <changeSet id="202329051001" author="bragin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="bike_user"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE bike_user
+            (
+                user_id     bigint PRIMARY KEY
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="202329051030" author="bragin">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_bike_user"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE thefted_bikes ADD CONSTRAINT fk_bike_user FOREIGN KEY (user_id) REFERENCES bike_user;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

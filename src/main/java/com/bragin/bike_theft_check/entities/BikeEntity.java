@@ -1,7 +1,10 @@
 package com.bragin.bike_theft_check.entities;
 
+import com.bragin.bike_theft_check.model.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,13 +43,13 @@ public class BikeEntity {
     @Column(name = "date_created")
     @Timestamp
     private LocalDateTime dateCreated;
-    @Column(name = "date_update")
-    @Timestamp
-    private LocalDateTime dateUpdate;
     @Column(name = "description")
     private String description;
-    @Column(name = "wanted")
-    private Boolean wanted = false;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    @Column(name = "link")
+    private String link;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;

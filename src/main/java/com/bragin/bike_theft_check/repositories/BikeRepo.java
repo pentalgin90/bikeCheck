@@ -12,4 +12,5 @@ import java.util.UUID;
 public interface BikeRepo extends CrudRepository<BikeEntity, UUID> {
     BikeEntity findByFrameNumber(String frameNumber);
     List<BikeEntity> findByUserEntity_UserId(long id);
+    Boolean existsByFrameNumber (String frameNumber);
 }

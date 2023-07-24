@@ -4,6 +4,7 @@ import com.bragin.bike_theft_check.converter.BikeConverterImpl
 import com.bragin.bike_theft_check.dto.BikeDto
 import com.bragin.bike_theft_check.entities.BikeEntity
 import com.bragin.bike_theft_check.entities.UserEntity
+import com.bragin.bike_theft_check.model.Status
 import com.bragin.bike_theft_check.repositories.BikeRepo
 import com.bragin.bike_theft_check.repositories.UserRepo
 import spock.lang.Specification
@@ -25,9 +26,9 @@ class BikeServiceSpec extends Specification{
                     "Marin",
                     "FS",
                     LocalDateTime.now(),
-                    LocalDateTime.now(),
                     "test",
-                    true,
+                    Status.Stolen,
+                    "http://test",
                     null
             )
             def user = new UserEntity();
@@ -57,9 +58,9 @@ class BikeServiceSpec extends Specification{
                     "Marin",
                     "FS",
                     LocalDateTime.now(),
-                    LocalDateTime.now(),
                     "test",
-                    true,
+                    Status.Stolen,
+                    "http://test",
                     null
             )
             def user = new UserEntity()
@@ -83,7 +84,8 @@ class BikeServiceSpec extends Specification{
                     "Marin",
                     "FS",
                     "test",
-                    true,
+                    Status.Stolen,
+                    "http://test",
                     1L
             )
             def bikeEntity = converter.dtoToEntity(bike)
@@ -108,7 +110,8 @@ class BikeServiceSpec extends Specification{
                     "Marin",
                     "FS",
                     "test",
-                    true,
+                    Status.Stolen,
+                    "http://test",
                     1L
             )
             def bikeEntity = converter.dtoToEntity(bike)
