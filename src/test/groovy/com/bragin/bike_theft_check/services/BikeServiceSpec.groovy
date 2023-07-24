@@ -42,11 +42,11 @@ class BikeServiceSpec extends Specification{
             result.equals(bike)
     }
 
-    def "Should return null if frameName equals blank" () {
+    def "Should return exception if frameName equals blank" () {
         when:
             def result = bikeService.findBikeByFrameNumber(null)
         then:
-            Objects.isNull(result)
+            thrown(Exception)
     }
 
     def "Should return list bikes by user_id" () {
