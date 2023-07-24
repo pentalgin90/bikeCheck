@@ -13,7 +13,6 @@ public interface BikeConverter {
     @Mapping(target = "userId", source = "userEntity.userId")
     BikeDto entityToDto(BikeEntity entity);
     @Mapping(target = "dateCreated", ignore = true)
-    @Mapping(target = "dateUpdate", ignore = true)
     @Mapping(target = "userEntity", ignore = true)
     BikeEntity dtoToEntity(BikeDto dto);
 

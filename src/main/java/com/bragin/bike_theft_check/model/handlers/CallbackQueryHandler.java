@@ -2,6 +2,7 @@ package com.bragin.bike_theft_check.model.handlers;
 
 import com.bragin.bike_theft_check.dto.BikeDto;
 import com.bragin.bike_theft_check.model.BotState;
+import com.bragin.bike_theft_check.model.Status;
 import com.bragin.bike_theft_check.services.BikeService;
 import com.bragin.bike_theft_check.services.MenuService;
 import com.bragin.bike_theft_check.services.cash.BikeCash;
@@ -53,14 +54,14 @@ public class CallbackQueryHandler {
         return split[2];
     }
 
-    private SendMessage savedChange(long chatId, long userId, Locale locale, boolean yesOrNo) {
+    private SendMessage savedChange(long chatId, long userId, Locale locale, boolean yes) {
         String message = messageSource.getMessage("msg.saved", new Object[]{}, locale);
         BikeDto bikeDto = bikeCash.getBikeMap().get(userId);
         bikeDto.setUserId(userId);
-        if (yesOrNo) {
-            bikeDto.setWanted(true);
+        if (yes) {
+            bikeDto.setStatus(Status.Stolen);
         } else {
-            bikeDto.setWanted(false);
+            bikeDto.setStatus(Status.Not_stolen);
         }
         if (Objects.isNull(bikeDto.getId())) {
             try {

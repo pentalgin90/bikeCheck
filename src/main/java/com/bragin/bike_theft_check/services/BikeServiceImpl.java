@@ -6,6 +6,7 @@ import com.bragin.bike_theft_check.entities.BikeEntity;
 import com.bragin.bike_theft_check.entities.UserEntity;
 import com.bragin.bike_theft_check.repositories.BikeRepo;
 import com.bragin.bike_theft_check.repositories.UserRepo;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,12 +40,15 @@ public class BikeServiceImpl implements BikeService{
     }
 
     @Override
-    public BikeDto findBikeByFrameNumber(String frameNumber) {
+    public BikeDto findBikeByFrameNumber(String frameNumber) throws Exception {
         if (Strings.isNotBlank(frameNumber)) {
             BikeEntity entity = bikeRepo.findByFrameNumber(frameNumber);
-            return converter.entityToDto(entity);
+            if (Objects.nonNull(entity)) {
+                return converter.entityToDto(entity);
+            }
+            throw new NotFoundException("bike was not find");
         } else {
-            return null;
+            throw new RuntimeException("frameNumber must not null");
         }
     }
 
@@ -59,6 +62,11 @@ public class BikeServiceImpl implements BikeService{
     }
 
     @Override
+    public boolean ifExist(String frameNumber) {
+        return bikeRepo.existsByFrameNumber(frameNumber);
+    }
+
+    @Override
     public BikeDto update(BikeDto bikeDto) {
         BikeEntity bikeEntity = converter.dtoToEntity(bikeDto);
         BikeEntity bikeFromDB = bikeRepo.findById(bikeEntity.getId()).orElse(null);
@@ -66,8 +74,7 @@ public class BikeServiceImpl implements BikeService{
         bikeFromDB.setVendor(bikeEntity.getVendor());
         bikeFromDB.setModelName(bikeEntity.getModelName());
         bikeFromDB.setDescription(bikeEntity.getDescription());
-        bikeFromDB.setWanted(bikeEntity.getWanted());
-        bikeFromDB.setDateUpdate(LocalDateTime.now());
+        bikeFromDB.setStatus(bikeEntity.getStatus());
         BikeEntity newBike = bikeRepo.save(bikeFromDB);
         return converter.entityToDto(newBike);
     }

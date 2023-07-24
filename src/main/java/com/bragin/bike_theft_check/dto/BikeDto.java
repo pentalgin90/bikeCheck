@@ -1,5 +1,6 @@
 package com.bragin.bike_theft_check.dto;
 
+import com.bragin.bike_theft_check.model.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class BikeDto {
     private String vendor;
     private String modelName;
     private String description;
-    private Boolean wanted;
+    private Status status;
+    private String link;
     private Long userId;
 }

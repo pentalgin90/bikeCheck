@@ -31,13 +31,20 @@ public class BikeHandler {
     private final MenuService menuService;
     private final MessageSource messageSource;
     private final TelegramBot telegramBot;
+
+    private static final String BIKE_MASSAGE_OUTSIDE =
+            """
+                    Frame number: %s
+                    Link: %s
+                    %s
+                    """;//TODO добавить в локализацию
     private static final String BIKE_MESSAGE_PATTERN =
             """
                     Frame number: %s
                     Vendor: %s
                     Model name: %s
                     Description: %s
-                    Wanted: %b
+                    Status: %s
                     %s
                     """;//TODO добавить в локализацию
     private static final String BIKE_MESSAGE =
@@ -46,7 +53,7 @@ public class BikeHandler {
                     Vendor: %s
                     Model name: %s
                     Description: %s
-                    Wanted: %b
+                    Status: %s
                     """;//TODO добавить в локализацию
     private static final String NOT_FIND = EmojiParser.parseToUnicode(":white_check_mark:");
     private static final String FIND = EmojiParser.parseToUnicode(":x:");
@@ -124,20 +131,31 @@ public class BikeHandler {
 
     public BotApiMethod<?> findBikeByNumber(Message message, long userId, Locale locale) {
         String frameNumber = message.getText();
-        BikeDto bike = bikeService.findBikeByFrameNumber(frameNumber);
-        if (Objects.nonNull(bike)) {
+        BikeDto bike = null;
+        try {
+            bike = bikeService.findBikeByFrameNumber(frameNumber);
             botStateCash.saveBotState(userId, BotState.START);
-            StringFormattedMessage stringFormattedMessage = new StringFormattedMessage(
-                    BIKE_MESSAGE_PATTERN,
-                    bike.getFrameNumber(),
-                    bike.getVendor(),
-                    bike.getModelName(),
-                    bike.getDescription(),
-                    bike.getWanted(),
-                    FIND
-            );
+            StringFormattedMessage stringFormattedMessage;
+            if (Objects.nonNull(bike.getLink())) {
+                stringFormattedMessage = new StringFormattedMessage(
+                        BIKE_MASSAGE_OUTSIDE,
+                        bike.getFrameNumber(),
+                        bike.getLink(),
+                        FIND
+                );
+            } else {
+                stringFormattedMessage = new StringFormattedMessage(
+                        BIKE_MESSAGE_PATTERN,
+                        bike.getFrameNumber(),
+                        bike.getVendor(),
+                        bike.getModelName(),
+                        bike.getDescription(),
+                        bike.getStatus(),
+                        FIND
+                );
+            }
             return menuService.getMainMenuMessage(message.getChatId(), stringFormattedMessage.toString(), userId);
-        } else {
+        } catch (Exception e) {
             return menuService.getMainMenuMessage(message.getChatId(), NOT_FIND, userId);
         }
     }
@@ -152,14 +170,12 @@ public class BikeHandler {
                             bike.getVendor(),
                             bike.getModelName(),
                             bike.getDescription(),
-                            bike.getWanted()
+                            bike.getStatus()
                     );
                     return stringFormattedMessage.toString();
                 })
                 .collect(Collectors.toList());
         List<SendMessage> updateMenu = menuService.getUpdateMenu(chatId, messages);
-        updateMenu.forEach(s -> {
-            telegramBot.sendMessage(s);
-        });
+        updateMenu.forEach(telegramBot::sendMessage);
     }
 }
