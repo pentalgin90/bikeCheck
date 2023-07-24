@@ -25,16 +25,7 @@ spring:
             non_contextual_creation: true
     generate-ddl: false
     open-in-view: off
-  task:
-    scheduling:
-      pool:
-        size: 2
-cron:
-  rss: 0 30 3 * * ?
-  parser: 0 0 4 * * ?
 telegram:
   botPath: ${TGBOT_PATH:https://4689-88-118-182-80.ngrok-free.app}
   botUsername: ${TGBOT_BOTNAME:BikeTheftCheck}
   botToken: ${TGBOT_TOKEN:6297562865:AAHmoQfoV_d_0u6Om178U5U9ncyOIRM4egk}
-rss:
-  baseUrl: ${RSS_URL:https://veloby.net/stolen-bikes/rss}
