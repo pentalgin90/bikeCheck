@@ -10,8 +10,8 @@ spring:
     password: ${POSTGRES_PASSWORD:postgres}
     hikari:
       schema: ${POSTGRES_SCHEMA:bike}
-      maximum-pool-size: 5
-      minimum-idle: 2
+      maximum-pool-size: 10
+      minimum-idle: 5
       connection-timeout: 30000
       pool-name: datasource-pool-bike
     initialization-mode: always
@@ -25,6 +25,10 @@ spring:
             non_contextual_creation: true
     generate-ddl: false
     open-in-view: off
+  task:
+    scheduling:
+      pool:
+        size: 2
 cron:
   rss: 0 30 3 * * ?
   parser: 0 0 4 * * ?
