@@ -24,7 +24,7 @@ public class ParserWeb {
     private static final String URL = "https://www.dviraciuregistras.lt";
     private static final String URL_FIRST = "https://www.dviraciuregistras.lt/pavogti-dviraciai";
     private static final String URL_ITERATION = "/puslapis-";
-    @Scheduled(cron = "${cron.parser")
+    @Scheduled(cron = "${cron.parser}")
     public void updateDataFromWebSite() throws IOException {
         String url = URL_FIRST;
         Document doc = Jsoup.connect(url).get();
