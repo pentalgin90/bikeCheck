@@ -95,6 +95,7 @@ public class MenuService {
                     sendMessage.setChatId(String.valueOf(chatId));
                     sendMessage.setText(message);
                     sendMessage.setReplyMarkup(getInlineMessageUpdateBikes());
+                    sendMessage.setParseMode("html");
                     return sendMessage;
                 })
                 .collect(Collectors.toList());
