@@ -70,6 +70,13 @@ jobs:
             docker rm $(echo $IMAGE_NAME)
             # Run a new container from a new image
             docker run -d \
+            --env POSTGRES_URL=${{ secrets.POSTGRES_URL }} \
+            --env POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+            --env POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+            --env POSTGRES_SCHEMA=${{ secrets.POSTGRES_SCHEMA }} \
+            --env TGBOT_PATH=${{ secrets.TGBOT_PATH }} \
+            --env TGBOT_BOTNAME=${{ secrets.TGBOT_BOTNAME }} \
+            --env TGBOT_TOKEN=${{ secrets.TGBOT_TOKEN }} \
             -p 8080:8080 \
             --restart always \
             --name $(echo $IMAGE_NAME) \
