@@ -26,9 +26,6 @@ jobs:
       - name: Checkout the repo 
         uses: actions/checkout@v2
 
-      - name: Install Java
-        run: apt install openjdk-17-jdk -y
-
       - name: Maven build
         run: mvn clean install
         
