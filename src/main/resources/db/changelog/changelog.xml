@@ -5,4 +5,5 @@
                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <include relativeToChangelogFile="true" file="202318041100_init.xml"/>
     <include relativeToChangelogFile="true" file="202307241204_add_cron_users.xml"/>
+    <include relativeToChangelogFile="true" file="202326070143_set_data.xml"/>
 </databaseChangeLog>
