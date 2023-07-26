@@ -60,4 +60,13 @@
             ALTER TABLE thefted_bikes ADD CONSTRAINT fk_bike_user FOREIGN KEY (user_id) REFERENCES bike_user;
         </sql>
     </changeSet>
+
+    <changeSet id="202329051031" author="bragin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="thefted_bikes"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE thefted_bikes ADD CONSTRAINT frame_number_unq UNIQUE (frame_number);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

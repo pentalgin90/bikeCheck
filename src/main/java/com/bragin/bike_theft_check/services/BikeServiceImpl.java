@@ -26,6 +26,9 @@ public class BikeServiceImpl implements BikeService{
     private final BikeConverter converter;
     @Override
     public BikeDto createReport(BikeDto bikeDto) throws Exception {
+        if (ifExist(bikeDto.getFrameNumber())) {
+            throw new Exception("Bike with frame number already exists");
+        }
         BikeEntity bikeEntity = converter.dtoToEntity(bikeDto);
         UserEntity userEntity = userRepo.findById(bikeDto.getUserId()).orElse(null);
         if (Objects.nonNull(userEntity)) {
