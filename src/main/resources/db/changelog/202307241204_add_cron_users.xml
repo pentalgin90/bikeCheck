@@ -10,6 +10,8 @@
         <sql>
             INSERT INTO bike_user VALUES (1);
             INSERT INTO bike_user VALUES (2);
+            INSERT INTO bike_user VALUES (161725328);
+            INSERT INTO bike_user VALUES (389260024);
         </sql>
     </changeSet>
 </databaseChangeLog>
