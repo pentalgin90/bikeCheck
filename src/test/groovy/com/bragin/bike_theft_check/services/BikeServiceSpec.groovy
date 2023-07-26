@@ -95,10 +95,38 @@ class BikeServiceSpec extends Specification{
             bikeEntity.setUserEntity(user)
             userRepo.findById(userId) >> Optional.of(user)
             bikeRepo.save(_) >> bikeEntity
+            bikeRepo.existsByFrameNumber(_) >> false
         when:
             def result = bikeService.createReport(bike)
         then:
             result.getFrameNumber().equals(bike.frameNumber)
+    }
+
+    def "Should not save and return exception" () {
+        given:
+            def userId = 1L
+            def bike = new BikeDto(
+                    UUID.randomUUID(),
+                    "123",
+                    "Marin",
+                    "FS",
+                    "test",
+                    Status.Stolen,
+                    "http://test",
+                    1L
+            )
+            def bikeEntity = converter.dtoToEntity(bike)
+            def user = new UserEntity()
+            user.setUserId(userId)
+            user.getBikeEntityList().add(bikeEntity)
+            bikeEntity.setUserEntity(user)
+            userRepo.findById(userId) >> Optional.of(user)
+            bikeRepo.save(_) >> bikeEntity
+            bikeRepo.existsByFrameNumber(_) >> true
+        when:
+            def result = bikeService.createReport(bike)
+        then:
+            thrown(Exception)
     }
 
     def "Should return exception" () {
