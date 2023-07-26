@@ -332,4 +332,13 @@
             Insert Into thefted_bikes(id, frame_number, date_created, link, user_id) VALUES ('e1744894-ce6f-4d84-978f-61a56cd19b48','BYP121110039','2023-07-25 09:17:09.954384','https://www.dviraciuregistras.lt/dviracio-informacija/2042',2);
         </sql>
     </changeSet>
+    <changeSet id="202326071703" author="bragin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="thefted_bikes"/>
+        </preConditions>
+        <sql>
+            Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, user_id) values ('e5094751-61f7-48fa-8607-70d1e940ad9f','AJ11203928','Canyon','Grand Canyon','2023-07-26 07:45:46.783122','My bike','Not_stolen',161725328);
+            Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, user_id) values ('fbd9fcf5-cdcd-4cdf-9962-94b3c8086979','CM221553265','GT Great Elite','Great Elite','2023-07-26 10:55:27.679023','Brown','Not_stolen',389260024);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

@@ -12,7 +12,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.List;
 import java.util.Locale;
 
 import static com.bragin.bike_theft_check.utils.CreateLocale.getLocale;
@@ -49,8 +48,8 @@ public class MessageHandler {
                 sendMessage.setText(messageSource.getMessage("msg.frame", new Object[]{}, locale));
                 yield sendMessage;
             }
-            case FIND_BIKE -> {
-                botStateCash.saveBotState(userId, BotState.ENTER_FRAME_NUMBER_FOR_SEARCH);
+            case CHECK_BIKE -> {
+                botStateCash.saveBotState(userId, BotState.ENTER_FRAME_NUMBER_FOR_CHECK);
                 sendMessage.setText(messageSource.getMessage("msg.search", new Object[]{}, locale));
                 yield sendMessage;
             }
@@ -58,7 +57,7 @@ public class MessageHandler {
                 bikeHandler.getAllBikes(message.getChatId(), userId);
                 yield null;
             }
-            case ENTER_FRAME_NUMBER_FOR_SEARCH -> bikeHandler.findBikeByNumber(message, userId, locale);
+            case ENTER_FRAME_NUMBER_FOR_CHECK -> bikeHandler.findBikeByNumber(message, userId, locale);
             case ENTER_FRAME_NUMBER -> bikeHandler.enterFrameNumber(message, userId, locale);
             case ENTER_VENDOR -> bikeHandler.enterVendorName(message, userId, locale);
             case ENTER_MODEL_NAME -> bikeHandler.enterModelName(message, userId, locale);

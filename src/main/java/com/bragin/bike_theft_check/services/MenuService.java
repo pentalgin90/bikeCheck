@@ -1,10 +1,11 @@
 package com.bragin.bike_theft_check.services;
 
 import com.bragin.bike_theft_check.dto.UserDto;
+import com.bragin.bike_theft_check.model.TelegramFacade;
+import com.bragin.bike_theft_check.model.handlers.CallbackQueryHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -24,7 +25,7 @@ public class MenuService {
     private final UserService userService;
     private final MessageSource messageSource;
     public SendMessage getMainMenuMessage(final long chatId, final String textMessage, final long userId) {
-        final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard(userId);
+        final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
         final SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(textMessage);
@@ -36,7 +37,7 @@ public class MenuService {
         }
         return sendMessage;
     }
-    private ReplyKeyboardMarkup getMainMenuKeyboard(long userId) {
+    private ReplyKeyboardMarkup getMainMenuKeyboard() {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
@@ -46,9 +47,9 @@ public class MenuService {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton("Add"));
-        row1.add(new KeyboardButton("Find"));
-        row1.add(new KeyboardButton("My bikes"));
+        row1.add(new KeyboardButton(TelegramFacade.ADD));
+        row1.add(new KeyboardButton(TelegramFacade.CHECK));
+        row1.add(new KeyboardButton(TelegramFacade.MY_BIKE));
         keyboard.add(row1);
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
@@ -70,8 +71,8 @@ public class MenuService {
         buttonYes.setText(messageSource.getMessage("button.yes", new Object[]{}, locale));
         InlineKeyboardButton buttonNo = new InlineKeyboardButton();
         buttonNo.setText(messageSource.getMessage("button.no", new Object[]{}, locale));
-        buttonYes.setCallbackData("buttonYes");
-        buttonNo.setCallbackData("buttonNo");
+        buttonYes.setCallbackData(CallbackQueryHandler.YES);
+        buttonNo.setCallbackData(CallbackQueryHandler.NO);
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
@@ -105,7 +106,7 @@ public class MenuService {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton buttonDelete = new InlineKeyboardButton();
         buttonDelete.setText("Delete");
-        buttonDelete.setCallbackData("buttonDelete");
+        buttonDelete.setCallbackData(CallbackQueryHandler.DELETE);
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         keyboardButtonsRow1.add(buttonDelete);

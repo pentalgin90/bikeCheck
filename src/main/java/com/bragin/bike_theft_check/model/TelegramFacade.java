@@ -21,6 +21,12 @@ public class TelegramFacade {
     final CallbackQueryHandler callbackQueryHandler;
     final MessageHandler messageHandler;
 
+    public static final String INFO = "/info";
+    public static final String START = "/start";
+    public static final String ADD = "Add";
+    public static final String CHECK = "Check";
+    public static final String MY_BIKE = "My bike";
+
     public BotApiMethod<?> handleUpdate(Update update) {
 
         if (update.hasCallbackQuery()) {
@@ -40,11 +46,11 @@ public class TelegramFacade {
         BotState botState;
         String inputMsg = message.getText();
         botState = switch (inputMsg) {
-            case "/info" -> BotState.INFO;
-            case "/start" -> BotState.START;
-            case "Add" -> BotState.CREATE;
-            case "Find" -> BotState.FIND_BIKE;
-            case "My bikes" -> BotState.MY_BIKES;
+            case INFO -> BotState.INFO;
+            case START -> BotState.START;
+            case ADD -> BotState.CREATE;
+            case CHECK -> BotState.CHECK_BIKE;
+            case MY_BIKE -> BotState.MY_BIKES;
             default -> botStateCash.getBotStateMap().get(message.getFrom().getId()) == null ?
                     BotState.START : botStateCash.getBotStateMap().get(message.getFrom().getId());
         };

@@ -27,19 +27,23 @@ public class CallbackQueryHandler {
     private final BikeService bikeService;
     private final MenuService menuService;
     private final MessageSource messageSource;
+
+    public static final String YES = "buttonYes";
+    public static final String NO = "buttonNo";
+    public static final String DELETE = "buttonDelete";
     public BotApiMethod<?> processCallbackQuery(CallbackQuery callbackQuery) {
         final long chatId = callbackQuery.getMessage().getChatId();
         final long userId = callbackQuery.getFrom().getId();
         final Locale locale = getLocale(callbackQuery.getFrom().getLanguageCode());
         String data = callbackQuery.getData();
         return switch (data) {
-            case "buttonYes" -> {
+            case YES -> {
                 yield savedChange(chatId, userId, locale, true);
             }
-            case "buttonNo" -> {
+            case NO -> {
                 yield savedChange(chatId, userId, locale, false);
             }
-            case "buttonDelete" -> {
+            case DELETE -> {
                 String message = messageSource.getMessage("msg.deleted", new Object[]{}, locale);
                 String frameNumber = getFrameNumber(callbackQuery.getMessage().getText());
                 bikeService.deleteBike(frameNumber);

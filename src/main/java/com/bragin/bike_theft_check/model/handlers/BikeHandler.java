@@ -8,7 +8,6 @@ import com.bragin.bike_theft_check.services.MenuService;
 import com.bragin.bike_theft_check.services.cash.BikeCash;
 import com.bragin.bike_theft_check.services.cash.BotStateCash;
 import com.vdurmont.emoji.EmojiParser;
-import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.context.MessageSource;

@@ -79,7 +79,7 @@ class MessageHandlerSpec extends Specification {
             message.setMessageId(1)
             def sendMessage = createSendMessage(String.valueOf(chatId), text)
             def locale = Locale.ENGLISH
-            def botState = BotState.FIND_BIKE
+            def botState = BotState.CHECK_BIKE
             messageSource.getMessage("msg.search", new Object[]{}, locale) >> text
         when:
             def result = messageHandler.handle(message, botState)
@@ -96,7 +96,7 @@ class MessageHandlerSpec extends Specification {
             message.setMessageId(1)
             def sendMessage = createSendMessage(String.valueOf(chatId), text)
             def locale = Locale.ENGLISH
-            def botState = BotState.ENTER_FRAME_NUMBER_FOR_SEARCH
+            def botState = BotState.ENTER_FRAME_NUMBER_FOR_CHECK
             bikeHandler.findBikeByNumber(message, userId, locale) >> sendMessage
         when:
             def result = messageHandler.handle(message, botState)
