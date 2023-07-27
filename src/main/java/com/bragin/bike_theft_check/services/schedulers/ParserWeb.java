@@ -3,6 +3,7 @@ package com.bragin.bike_theft_check.services.schedulers;
 import com.bragin.bike_theft_check.dto.BikeDto;
 import com.bragin.bike_theft_check.services.BikeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
@@ -12,10 +13,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ParserWeb {
@@ -25,26 +25,31 @@ public class ParserWeb {
     private static final String URL_FIRST = "https://www.dviraciuregistras.lt/pavogti-dviraciai";
     private static final String URL_ITERATION = "/puslapis-";
     @Scheduled(cron = "${cron.parser}")
-    public void updateDataFromWebSite() throws IOException {
-        String url = URL_FIRST;
-        Document doc = Jsoup.connect(url).get();
-        List<BikeDto> dtos = parsePage(url);
-        int countPage = getCountPage(doc);
-        for (int i = 2; i < countPage; i++) {
-            String urlLink = URL_FIRST + URL_ITERATION + i;
-            dtos.addAll(parsePage(urlLink));
+    public void updateDataFromWebSite() {
+        try {
+            String url = URL_FIRST;
+            Document doc = Jsoup.connect(url).get();
+            List<BikeDto> dtos = parsePage(url);
+            int countPage = getCountPage(doc);
+            for (int i = 2; i < countPage; i++) {
+                String urlLink = URL_FIRST + URL_ITERATION + i;
+                dtos.addAll(parsePage(urlLink));
+            }
+            log.info("Dviraciuregistras.lt was parsed");
+            dtos.stream()
+                    .filter(bike -> Strings.isNotBlank(bike.getFrameNumber()))
+                    .filter(bike -> bike.getFrameNumber().length() > 1)
+                    .filter(bike -> !bikeService.ifExist(bike.getFrameNumber()))
+                    .forEach(bike -> {
+                        try {
+                            bikeService.createReport(bike);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        } catch (IOException e) {
+            log.error("Problem with parsing Dviraciuregistras.lt: %s", e.getMessage());
         }
-        dtos.stream()
-                .filter(bike -> Strings.isNotBlank(bike.getFrameNumber()))
-                .filter(bike -> bike.getFrameNumber().length() > 1)
-                .filter(bike -> !bikeService.ifExist(bike.getFrameNumber()))
-                .forEach(bike -> {
-                    try {
-                        bikeService.createReport(bike);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
     }
 
     private List<BikeDto> parsePage(String url) throws IOException {
