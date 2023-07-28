@@ -2,7 +2,6 @@ package com.bragin.bike_theft_check.services.schedulers;
 
 import com.bragin.bike_theft_check.configuration.props.RssProperties;
 import com.bragin.bike_theft_check.dto.BikeDto;
-import com.bragin.bike_theft_check.services.BikeService;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
@@ -11,8 +10,6 @@ import com.sun.syndication.io.XmlReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
-import org.hibernate.annotations.Comment;
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +27,20 @@ public class RssParser implements Parser {
 
     private final RssProperties rssProperties;
 
+    private static BikeDto apply(SyndEntryImpl e) {
+        BikeDto bikeDto = new BikeDto();
+        bikeDto.setUserId(1L);
+        String[] arrays = e.getDescription().getValue().split("Номер рамы");
+        if (arrays.length > 1) {
+            String[] split = arrays[1].split("</div>");
+            if (split.length > 1) {
+                bikeDto.setFrameNumber(split[1].replaceAll("\\s", ""));
+            }
+        }
+        bikeDto.setLink(e.getLink());
+        return bikeDto;
+    }
+
     @Override
     public List<BikeDto> parse() {
         try {
@@ -39,20 +50,7 @@ public class RssParser implements Parser {
             List<SyndEntryImpl> entries = feed.getEntries();
             log.info("Rss chanel was parsed");
             return entries.stream()
-                    .map(e -> {
-                        BikeDto bikeDto = new BikeDto();
-                        bikeDto.setUserId(1L);
-                        String frameNumber = null;
-                        String[] arrays = e.getDescription().getValue().split("Номер рамы");
-                        if (arrays.length > 1) {
-                            String[] split = arrays[1].split("</div>");
-                            if (split.length > 1) {
-                                bikeDto.setFrameNumber(split[1].replaceAll("\\s", ""));
-                            }
-                        }
-                        bikeDto.setLink(e.getLink());
-                        return bikeDto;
-                    })
+                    .map(RssParser::apply)
                     .filter(bike -> Strings.isNotBlank(bike.getFrameNumber()))
                     .filter(bike -> bike.getFrameNumber().length() > 1)
                     .collect(Collectors.toList());

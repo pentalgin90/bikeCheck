@@ -1,14 +1,12 @@
 package com.bragin.bike_theft_check.services.schedulers;
 
 import com.bragin.bike_theft_check.dto.BikeDto;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
