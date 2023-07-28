@@ -30,7 +30,6 @@ spring:
       pool:
         size: 5
 cron:
-  rss: 0 30 3 * * ?
   parser: 0 0 4 * * ?
 telegram:
   botPath: ${TGBOT_PATH:https://5534-88-118-182-80.ngrok-free.app}

@@ -11,31 +11,34 @@ import com.sun.syndication.io.XmlReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.hibernate.annotations.Comment;
+import org.jvnet.hk2.annotations.Service;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
-@Service
+@Component
 @EnableConfigurationProperties(RssProperties.class)
 @RequiredArgsConstructor
-public class RssReader {
+public class RssParser implements Parser {
 
     private final RssProperties rssProperties;
-    private final BikeService bikeService;
 
-    @Scheduled(cron = "${cron.rss}")
-    public void updateDataFromRssChannel() {
+    @Override
+    public List<BikeDto> parse() {
         try {
             URL feedSource = new URL(rssProperties.getBaseUrl());
             SyndFeedInput input = new SyndFeedInput();
             SyndFeed feed = input.build(new XmlReader(feedSource));
             List<SyndEntryImpl> entries = feed.getEntries();
             log.info("Rss chanel was parsed");
-            entries.stream()
+            return entries.stream()
                     .map(e -> {
                         BikeDto bikeDto = new BikeDto();
                         bikeDto.setUserId(1L);
@@ -52,16 +55,10 @@ public class RssReader {
                     })
                     .filter(bike -> Strings.isNotBlank(bike.getFrameNumber()))
                     .filter(bike -> bike.getFrameNumber().length() > 1)
-                    .filter(bike -> !bikeService.ifExist(bike.getFrameNumber()))
-                    .forEach(bike -> {
-                        try {
-                            bikeService.createReport(bike);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+                    .collect(Collectors.toList());
         } catch (FeedException | IOException e) {
             log.error("Problem with RSS chanel: %s", e.getMessage());
+            return new ArrayList<>();
         }
     }
 }
