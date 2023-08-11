@@ -339,6 +339,12 @@
         <sql>
             Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, user_id) values ('e5094751-61f7-48fa-8607-70d1e940ad9f','AJ11203928','Canyon','Grand Canyon','2023-07-26 07:45:46.783122','My bike','Not_stolen',161725328);
             Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, user_id) values ('fbd9fcf5-cdcd-4cdf-9962-94b3c8086979','CM221553265','GT Great Elite','Great Elite','2023-07-26 10:55:27.679023','Brown','Not_stolen',389260024);
+            Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, link, user_id) values ('c2594cb8-5fb0-48d6-98ad-b148c0ae1578', '19', 'Barham', '29', '2023-07-27 14:36:44.492495', 'Зелёный дорогокат', 'Not_stolen', NULL, 107785477);
+            Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, link, user_id) values ('c17cfc99-5dcb-42ea-bc19-b6177b503eb8', 'H7KB58847', NULL, NULL, '2023-07-29 04:00:13.650458', NULL, NULL, 'https://www.dviraciuregistras.lt/dviracio-informacija/243', 2);
+            Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, link, user_id) values ('dd561d6d-5e82-44a1-b97d-3febfca21284', 'EN14766EM', NULL, NULL, '2023-08-04 04:00:10.876375', NULL, NULL, 'https://www.dviraciuregistras.lt/dviracio-informacija/884', 2);
+            Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, link, user_id) values ('cb30cce1-1e43-4374-85cb-1c1d6e009ffd', 'UV06284337', NULL, NULL, '2023-08-05 04:00:11.33998', NULL, NULL, 'https://www.dviraciuregistras.lt/dviracio-informacija/587', 2);
+            Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, link, user_id) values ('c6089a0c-40e0-4ced-8ff3-b1ab39ca58d5', 'WCR1272200N', NULL, NULL, '2023-08-07 04:00:11.492968', NULL, NULL, 'https://www.dviraciuregistras.lt/dviracio-informacija/14530', 2);
+            Insert Into thefted_bikes(id, frame_number, vendor, model_name, date_created, description, status, link, user_id) values ('a5aeab14-7dde-4103-b73b-ad997ab5770f', '2015', NULL, NULL, '2023-08-08 04:00:11.109832', NULL, NULL, 'https://www.dviraciuregistras.lt/dviracio-informacija/18849', 2);
         </sql>
     </changeSet>
 </databaseChangeLog>
