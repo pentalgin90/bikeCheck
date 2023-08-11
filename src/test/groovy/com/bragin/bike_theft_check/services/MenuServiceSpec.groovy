@@ -51,8 +51,11 @@ class MenuServiceSpec extends Specification{
     def "Should return list SendMessage with update keyBoard" () {
         given:
             def listMessage = [textMessage]
+            messageSource.getMessage("button.delete", new Object[]{}, locale) >> "Delete"
+            messageSource.getMessage("button.stolen", new Object[]{}, locale) >> "Stolen"
+        messageSource.getMessage("button.notstolen", new Object[]{}, locale) >> "Not Stolen"
         when:
-            def result = menuService.getUpdateMenu(chatId, listMessage)
+            def result = menuService.getUpdateMenu(chatId, listMessage, locale)
         then:
             Objects.nonNull(result)
     }
