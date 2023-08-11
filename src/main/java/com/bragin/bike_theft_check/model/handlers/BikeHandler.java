@@ -159,7 +159,7 @@ public class BikeHandler {
         }
     }
 
-    public void getAllBikes(Long chatId, long userId) {
+    public void getAllBikes(Long chatId, long userId, Locale locale) {
         List<BikeDto> allBikesByUserId = bikeService.getAllBikesByUserId(userId);
         List<String> messages = allBikesByUserId.stream()
                 .map(bike -> {
@@ -174,7 +174,7 @@ public class BikeHandler {
                     return stringFormattedMessage.toString();
                 })
                 .collect(Collectors.toList());
-        List<SendMessage> updateMenu = menuService.getUpdateMenu(chatId, messages);
+        List<SendMessage> updateMenu = menuService.getUpdateMenu(chatId, messages, locale);
         updateMenu.forEach(telegramBot::sendMessage);
     }
 }

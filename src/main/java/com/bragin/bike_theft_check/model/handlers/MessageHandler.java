@@ -54,7 +54,7 @@ public class MessageHandler {
                 yield sendMessage;
             }
             case MY_BIKES -> {
-                bikeHandler.getAllBikes(message.getChatId(), userId);
+                bikeHandler.getAllBikes(message.getChatId(), userId, locale);
                 yield null;
             }
             case ENTER_FRAME_NUMBER_FOR_CHECK -> bikeHandler.findBikeByNumber(message, userId, locale);

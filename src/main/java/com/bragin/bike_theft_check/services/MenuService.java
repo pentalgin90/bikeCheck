@@ -88,28 +88,38 @@ public class MenuService {
         return inlineKeyboardMarkup;
     }
 
-    public List<SendMessage> getUpdateMenu(final long chatId, final List<String> messages) {
+    public List<SendMessage> getUpdateMenu(final long chatId, final List<String> messages, Locale locale) {
         return messages.stream()
                 .map(message -> {
                     final SendMessage sendMessage = new SendMessage();
                     sendMessage.enableMarkdown(true);
                     sendMessage.setChatId(String.valueOf(chatId));
                     sendMessage.setText(message);
-                    sendMessage.setReplyMarkup(getInlineMessageUpdateBikes());
+                    sendMessage.setReplyMarkup(getInlineMessageUpdateBikes(locale));
                     sendMessage.setParseMode("html");
                     return sendMessage;
                 })
                 .collect(Collectors.toList());
     }
 
-    private InlineKeyboardMarkup getInlineMessageUpdateBikes() {
+    private InlineKeyboardMarkup getInlineMessageUpdateBikes(Locale locale) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton buttonDelete = new InlineKeyboardButton();
-        buttonDelete.setText("Delete");
+        buttonDelete.setText(messageSource.getMessage("button.delete", new Object[]{}, locale));
         buttonDelete.setCallbackData(CallbackQueryHandler.DELETE);
+
+        InlineKeyboardButton buttonStolen = new InlineKeyboardButton();
+        buttonStolen.setText(messageSource.getMessage("button.stolen", new Object[]{}, locale));
+        buttonStolen.setCallbackData(CallbackQueryHandler.STOLEN);
+
+        InlineKeyboardButton buttonNotStolen = new InlineKeyboardButton();
+        buttonNotStolen.setText(messageSource.getMessage("button.notstolen", new Object[]{}, locale));
+        buttonNotStolen.setCallbackData(CallbackQueryHandler.NOT_STOLEN);
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         keyboardButtonsRow1.add(buttonDelete);
+        keyboardButtonsRow1.add(buttonStolen);
+        keyboardButtonsRow1.add(buttonNotStolen);
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
          inlineKeyboardMarkup.setKeyboard(rowList);

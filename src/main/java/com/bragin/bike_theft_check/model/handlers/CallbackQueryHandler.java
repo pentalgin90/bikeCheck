@@ -31,6 +31,8 @@ public class CallbackQueryHandler {
     public static final String YES = "buttonYes";
     public static final String NO = "buttonNo";
     public static final String DELETE = "buttonDelete";
+    public static final String STOLEN = "buttonStolen";
+    public static final String NOT_STOLEN = "buttonNotStolen";
     public BotApiMethod<?> processCallbackQuery(CallbackQuery callbackQuery) {
         final long chatId = callbackQuery.getMessage().getChatId();
         final long userId = callbackQuery.getFrom().getId();
@@ -47,6 +49,18 @@ public class CallbackQueryHandler {
                 String message = messageSource.getMessage("msg.deleted", new Object[]{}, locale);
                 String frameNumber = getFrameNumber(callbackQuery.getMessage().getText());
                 bikeService.deleteBike(frameNumber);
+                yield menuService.getMainMenuMessage(chatId, message, userId);
+            }
+            case STOLEN -> {
+                String message = messageSource.getMessage("msg.updated", new Object[]{}, locale);
+                String frameNumber = getFrameNumber(callbackQuery.getMessage().getText());
+                bikeService.updateStatus(frameNumber, Status.Stolen);
+                yield menuService.getMainMenuMessage(chatId, message, userId);
+            }
+            case NOT_STOLEN -> {
+                String message = messageSource.getMessage("msg.updated", new Object[]{}, locale);
+                String frameNumber = getFrameNumber(callbackQuery.getMessage().getText());
+                bikeService.updateStatus(frameNumber, Status.Not_stolen);
                 yield menuService.getMainMenuMessage(chatId, message, userId);
             }
             default -> throw new IllegalStateException("Unexpected value: " + botStateCash.getBotStateMap().get(userId));
