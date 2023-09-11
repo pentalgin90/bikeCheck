@@ -26,8 +26,11 @@ public class MenuService {
     private final MessageSource messageSource;
 
     public void remoteUser(long userId) {
-        userService.deleteUserById(userId);
+        if (!userService.existsById(userId)) {
+            userService.deleteUserById(userId);
+        }
     }
+
     public SendMessage getMainMenuMessage(final long chatId, final String textMessage, final long userId) {
         final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
         final SendMessage sendMessage = new SendMessage();
@@ -41,6 +44,7 @@ public class MenuService {
         }
         return sendMessage;
     }
+
     private ReplyKeyboardMarkup getMainMenuKeyboard() {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
@@ -126,7 +130,7 @@ public class MenuService {
         keyboardButtonsRow1.add(buttonNotStolen);
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
-         inlineKeyboardMarkup.setKeyboard(rowList);
-         return inlineKeyboardMarkup;
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
     }
 }
