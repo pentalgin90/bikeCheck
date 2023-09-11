@@ -16,6 +16,10 @@
             INSERT INTO bike_user (user_id) VALUES (232042829);
             INSERT INTO bike_user (user_id) VALUES (354081149);
             INSERT INTO bike_user (user_id) VALUES (995645729);
+            INSERT INTO bike_user (user_id) VALUES (105986922);
+            INSERT INTO bike_user (user_id) VALUES (513224028);
+            INSERT INTO bike_user (user_id) VALUES (1410899334);
+            INSERT INTO bike_user (user_id) VALUES (381129554);
         </sql>
     </changeSet>
 </databaseChangeLog>

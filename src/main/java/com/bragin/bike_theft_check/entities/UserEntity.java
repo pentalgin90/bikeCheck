@@ -27,6 +27,6 @@ public class UserEntity {
     @Id
     @Column(name = "user_id")
     private long userId;
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<BikeEntity> bikeEntityList = new ArrayList<>();
 }

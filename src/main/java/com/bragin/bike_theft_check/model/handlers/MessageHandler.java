@@ -3,6 +3,7 @@ package com.bragin.bike_theft_check.model.handlers;
 import com.bragin.bike_theft_check.dto.BikeDto;
 import com.bragin.bike_theft_check.model.BotState;
 import com.bragin.bike_theft_check.services.MenuService;
+import com.bragin.bike_theft_check.services.UserService;
 import com.bragin.bike_theft_check.services.cash.BikeCash;
 import com.bragin.bike_theft_check.services.cash.BotStateCash;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,14 @@ public class MessageHandler {
             case START -> {
                 String text = messageSource.getMessage("msg.use", new Object[]{}, locale);
                 yield menuService.getMainMenuMessage(message.getChatId(), text, userId);
+            }
+            case STOP -> {
+                botStateCash.deleteBotState(userId);
+                bikeCash.deleteBikeCash(userId);
+                menuService.remoteUser(userId);
+                String text = messageSource.getMessage("msg.stop", new Object[]{}, locale);
+                sendMessage.setText(text);
+                yield sendMessage;
             }
             case CREATE -> {
                 botStateCash.saveBotState(userId, BotState.ENTER_FRAME_NUMBER);

@@ -24,6 +24,10 @@ public class MenuService {
 
     private final UserService userService;
     private final MessageSource messageSource;
+
+    public void remoteUser(long userId) {
+        userService.deleteUserById(userId);
+    }
     public SendMessage getMainMenuMessage(final long chatId, final String textMessage, final long userId) {
         final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
         final SendMessage sendMessage = new SendMessage();

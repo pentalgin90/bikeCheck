@@ -23,6 +23,8 @@ public class TelegramFacade {
 
     public static final String INFO = "/info";
     public static final String START = "/start";
+
+    public static final String STOP = "/stop";
     public static final String ADD = "Add";
     public static final String CHECK = "Check";
     public static final String MY_BIKE = "My bike";
@@ -48,6 +50,7 @@ public class TelegramFacade {
         botState = switch (inputMsg) {
             case INFO -> BotState.INFO;
             case START -> BotState.START;
+            case STOP -> BotState.STOP;
             case ADD -> BotState.CREATE;
             case CHECK -> BotState.CHECK_BIKE;
             case MY_BIKE -> BotState.MY_BIKES;

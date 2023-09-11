@@ -9,4 +9,6 @@ public interface UserService {
     UserDto create(UserDto userDto);
 
     boolean existsById(long id);
+
+    void deleteUserById(long id);
 }

@@ -17,4 +17,7 @@ public class BotStateCash {
     public void saveBotState(long userId, BotState botState) {
         botStateMap.put(userId, botState);
     }
+    public void deleteBotState(long userId) {
+        botStateMap.remove(userId);
+    }
 }

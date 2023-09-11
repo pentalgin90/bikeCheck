@@ -17,4 +17,7 @@ public class BikeCash {
     public void saveBikeCash(long userId, BikeDto bike) {
         bikeMap.put(userId, bike);
     }
+    public void deleteBikeCash(long userId) {
+        bikeMap.remove(userId);
+    }
 }
