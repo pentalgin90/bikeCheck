@@ -1,6 +1,6 @@
 package com.bragin.bike_theft_check.dto;
 
-import com.bragin.bike_theft_check.model.Status;
+import com.bragin.bike_theft_check.model.states.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.bragin.bike_theft_check.entities;
 
-import com.bragin.bike_theft_check.model.Status;
+import com.bragin.bike_theft_check.model.states.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @Data

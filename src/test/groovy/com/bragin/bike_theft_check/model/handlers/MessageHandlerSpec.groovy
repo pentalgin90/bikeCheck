@@ -1,6 +1,10 @@
 package com.bragin.bike_theft_check.model.handlers
 
-import com.bragin.bike_theft_check.model.BotState
+
+import com.bragin.bike_theft_check.model.states.EnterDescription
+import com.bragin.bike_theft_check.model.states.InfoState
+import com.bragin.bike_theft_check.model.states.MyBikesState
+import com.bragin.bike_theft_check.model.states.StartState
 import com.bragin.bike_theft_check.services.MenuService
 import com.bragin.bike_theft_check.services.cash.BikeCash
 import com.bragin.bike_theft_check.services.cash.BotStateCash
@@ -19,184 +23,176 @@ class MessageHandlerSpec extends Specification {
     def messageSource = Mock(MessageSource)
     def messageHandler = new MessageHandler(botStateCash, menuService, bikeCash, bikeHandler, messageSource)
 
-    def "Should return message with info block, with BotState equals INFO" () {
+    def "Should return message with info block, with BotState equals INFO"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.INFO
-            messageSource.getMessage("info", new Object[]{}, locale) >> text
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        final def state = new InfoState(messageHandler);
+        messageSource.getMessage("info", new Object[]{}, locale) >> text
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.sendInfo(message, state)
         then:
-            sendMessage == result
+        sendMessage == result
     }
 
-    def "Should return message with main menu" () {
+    def "Should return message with main menu"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.START
-            messageSource.getMessage("msg.use", new Object[]{}, locale) >> text
-            menuService.getMainMenuMessage(chatId, text, userId) >> sendMessage
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        final def state = new StartState(messageHandler);
+        messageSource.getMessage("msg.use", new Object[]{}, locale) >> text
+        menuService.getMainMenuMessage(chatId, text, userId) >> sendMessage
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.sendMenu(message, state)
         then:
-            sendMessage == result
+        sendMessage == result
     }
 
-    def "Should return message with text, BotState equals CREATE" () {
+    def "Should return message with text, BotState equals CREATE"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.CREATE
-            messageSource.getMessage("msg.frame", new Object[]{}, locale) >> text
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        messageSource.getMessage("msg.frame", new Object[]{}, locale) >> text
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.createBike(message)
         then:
-            result == sendMessage
+        result == sendMessage
     }
 
-    def "Should return message with text, BotState equals FIND_BIKE" () {
+    def "Should return message with text, BotState equals FIND_BIKE"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.CHECK_BIKE
-            messageSource.getMessage("msg.search", new Object[]{}, locale) >> text
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        messageSource.getMessage("msg.search", new Object[]{}, locale) >> text
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.checkBike(message)
         then:
-            result == sendMessage
+        result == sendMessage
     }
 
-    def "Should return message with text, BotState equals ENTER_FRAME_NUMBER_FOR_SEARCH" () {
+    def "Should return message with text, BotState equals ENTER_FRAME_NUMBER_FOR_SEARCH"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.ENTER_FRAME_NUMBER_FOR_CHECK
-            bikeHandler.findBikeByNumber(message, userId, locale) >> sendMessage
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        bikeHandler.findBikeByNumber(message, userId, locale) >> sendMessage
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.findBikeByNumber(message)
         then:
-            result == sendMessage
+        result == sendMessage
 
     }
 
-    def "Should return message with text, BotState equals ENTER_FRAME_NUMBER" () {
+    def "Should return message with text, BotState equals ENTER_FRAME_NUMBER"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.ENTER_FRAME_NUMBER
-            bikeHandler.enterFrameNumber(message, userId, locale) >> sendMessage
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        bikeHandler.enterFrameNumber(message, userId, locale) >> sendMessage
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.enterFrame(message)
         then:
-            result == sendMessage
+        result == sendMessage
 
     }
 
-    def "Should return message with text, BotState equals ENTER_VENDOR" () {
+    def "Should return message with text, BotState equals ENTER_VENDOR"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.ENTER_VENDOR
-            bikeHandler.enterVendorName(message, userId, locale) >> sendMessage
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        bikeHandler.enterVendorName(message, userId, locale) >> sendMessage
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.enterVendor(message)
         then:
-            result == sendMessage
+        result == sendMessage
 
     }
 
-    def "Should return message with text, BotState equals ENTER_MODEL_NAME" () {
+    def "Should return message with text, BotState equals ENTER_MODEL_NAME"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.ENTER_MODEL_NAME
-            bikeHandler.enterModelName(message, userId, locale) >> sendMessage
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        bikeHandler.enterModelName(message, userId, locale) >> sendMessage
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.enterModelName(message)
         then:
-            result == sendMessage
+        result == sendMessage
 
     }
 
-    def "Should return message with text, BotState equals ENTER_DESCRIPTION" () {
+    def "Should return message with text, BotState equals ENTER_DESCRIPTION"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.ENTER_DESCRIPTION
-            bikeHandler.enterDescription(message, userId, locale) >> sendMessage
+        final def chatId = 1L
+        final def userId = 1L
+        final def text = "test"
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def sendMessage = createSendMessage(String.valueOf(chatId), text)
+        final def locale = Locale.ENGLISH
+        final def state = new EnterDescription(messageHandler)
+        bikeHandler.enterDescription(message, userId, locale) >> sendMessage
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.enterDescription(message, state)
         then:
-            result == sendMessage
+        result == sendMessage
 
     }
 
-    def "Should return message with text, BotState equals MY_BIKES" () {
+    def "Should return message with text, BotState equals MY_BIKES"() {
         given:
-            def chatId = 1L
-            def userId = 1L
-            def text = "test"
-            def message = createMessage(chatId, userId)
-            message.setMessageId(1)
-            def sendMessage = createSendMessage(String.valueOf(chatId), text)
-            def locale = Locale.ENGLISH
-            def botState = BotState.MY_BIKES
-            bikeHandler.getAllBikes(message.getChatId(), userId, locale) >> {}
+        final def chatId = 1L
+        final def userId = 1L
+        final def message = createMessage(chatId, userId)
+        message.setMessageId(1)
+        final def locale = Locale.ENGLISH
+        final def state = new MyBikesState(messageHandler)
+        bikeHandler.getAllBikes(message.getChatId(), userId, locale) >> {}
         when:
-            def result = messageHandler.handle(message, botState)
+        final def result = messageHandler.returnBikes(message, state)
         then:
-            result == null
+        result == null
     }
 
-    def Message createMessage(long chatId, long userId) {
-        def message = new Message()
-        def user = new User(userId, "Test", false)
+    def Message createMessage(final long chatId, final long userId) {
+        final def message = new Message()
+        final def user = new User(userId, "Test", false)
         user.setLanguageCode("en")
         message.setFrom(user)
         message.setChat(new Chat(chatId, "private"))
@@ -204,8 +200,8 @@ class MessageHandlerSpec extends Specification {
         return message
     }
 
-    def SendMessage createSendMessage(String chatId, String text) {
-        def sendMessage = new SendMessage()
+    def SendMessage createSendMessage(final String chatId, final String text) {
+        final def sendMessage = new SendMessage()
         sendMessage.setChatId(chatId)
         sendMessage.setText(text)
         return sendMessage

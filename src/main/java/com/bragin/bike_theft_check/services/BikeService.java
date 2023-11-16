@@ -1,8 +1,7 @@
 package com.bragin.bike_theft_check.services;
 
 import com.bragin.bike_theft_check.dto.BikeDto;
-import com.bragin.bike_theft_check.model.Status;
-import javassist.NotFoundException;
+import com.bragin.bike_theft_check.model.states.Status;
 
 import java.util.List;
 

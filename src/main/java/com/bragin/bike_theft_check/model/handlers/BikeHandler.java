@@ -2,7 +2,6 @@ package com.bragin.bike_theft_check.model.handlers;
 
 import com.bragin.bike_theft_check.configuration.TelegramBot;
 import com.bragin.bike_theft_check.dto.BikeDto;
-import com.bragin.bike_theft_check.model.BotState;
 import com.bragin.bike_theft_check.services.BikeService;
 import com.bragin.bike_theft_check.services.MenuService;
 import com.bragin.bike_theft_check.services.cash.BikeCash;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 @Component
 public class BikeHandler {
     private final BikeCash bikeCash;
-    private final BotStateCash botStateCash;
     private final BikeService bikeService;
     private final MenuService menuService;
     private final MessageSource messageSource;
@@ -56,6 +54,7 @@ public class BikeHandler {
                     """;//TODO добавить в локализацию
     private static final String NOT_FIND = EmojiParser.parseToUnicode(":white_check_mark:");
     private static final String FIND = EmojiParser.parseToUnicode(":x:");
+
     public BikeHandler(
             BikeCash bikeCash,
             BotStateCash botStateCash,
@@ -65,7 +64,6 @@ public class BikeHandler {
             @Lazy TelegramBot telegramBot
     ) {
         this.bikeCash = bikeCash;
-        this.botStateCash = botStateCash;
         this.bikeService = bikeService;
         this.menuService = menuService;
         this.messageSource = messageSource;
@@ -80,7 +78,6 @@ public class BikeHandler {
             sendMessage.setText("Frame number mustn't be empty");//TODO добавить в локализацию
             return sendMessage;
         }
-        botStateCash.saveBotState(userId, BotState.ENTER_VENDOR);
         BikeDto bike = bikeCash.getBikeMap().get(userId);
         bike.setFrameNumber(frameNumber);
         bikeCash.saveBikeCash(userId, bike);
@@ -96,7 +93,6 @@ public class BikeHandler {
             sendMessage.setText("Vendor mustn't be empty");//TODO добавить в локализацию
             return sendMessage;
         }
-        botStateCash.saveBotState(userId, BotState.ENTER_MODEL_NAME);
         BikeDto bike = bikeCash.getBikeMap().get(userId);
         bike.setVendor(vendor);
         bikeCash.saveBikeCash(userId, bike);
@@ -112,7 +108,6 @@ public class BikeHandler {
             sendMessage.setText("Model name mustn't be empty");//TODO добавить в локализацию
             return sendMessage;
         }
-        botStateCash.saveBotState(userId, BotState.ENTER_DESCRIPTION);
         BikeDto bike = bikeCash.getBikeMap().get(userId);
         bike.setModelName(modelName);
         bikeCash.saveBikeCash(userId, bike);
@@ -133,7 +128,6 @@ public class BikeHandler {
         BikeDto bike = null;
         try {
             bike = bikeService.findBikeByFrameNumber(frameNumber);
-            botStateCash.saveBotState(userId, BotState.START);
             StringFormattedMessage stringFormattedMessage;
             if (Objects.nonNull(bike.getLink())) {
                 stringFormattedMessage = new StringFormattedMessage(

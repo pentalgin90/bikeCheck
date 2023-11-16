@@ -4,7 +4,7 @@ import com.bragin.bike_theft_check.converter.BikeConverter;
 import com.bragin.bike_theft_check.dto.BikeDto;
 import com.bragin.bike_theft_check.entities.BikeEntity;
 import com.bragin.bike_theft_check.entities.UserEntity;
-import com.bragin.bike_theft_check.model.Status;
+import com.bragin.bike_theft_check.model.states.Status;
 import com.bragin.bike_theft_check.repositories.BikeRepo;
 import com.bragin.bike_theft_check.repositories.UserRepo;
 import javassist.NotFoundException;

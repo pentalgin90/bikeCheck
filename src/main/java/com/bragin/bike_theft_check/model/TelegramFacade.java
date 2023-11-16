@@ -2,6 +2,13 @@ package com.bragin.bike_theft_check.model;
 
 import com.bragin.bike_theft_check.model.handlers.CallbackQueryHandler;
 import com.bragin.bike_theft_check.model.handlers.MessageHandler;
+import com.bragin.bike_theft_check.model.states.CheckState;
+import com.bragin.bike_theft_check.model.states.CreateState;
+import com.bragin.bike_theft_check.model.states.InfoState;
+import com.bragin.bike_theft_check.model.states.MyBikesState;
+import com.bragin.bike_theft_check.model.states.StartState;
+import com.bragin.bike_theft_check.model.states.State;
+import com.bragin.bike_theft_check.model.states.StopState;
 import com.bragin.bike_theft_check.services.cash.BotStateCash;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -45,22 +52,19 @@ public class TelegramFacade {
     }
 
     private BotApiMethod<?> handleInputMessage(Message message) {
-        BotState botState;
         String inputMsg = message.getText();
-        botState = switch (inputMsg) {
-            case INFO -> BotState.INFO;
-            case START -> BotState.START;
-            case STOP -> BotState.STOP;
-            case ADD -> BotState.CREATE;
-            case CHECK -> BotState.CHECK_BIKE;
-            case MY_BIKE -> BotState.MY_BIKES;
+        State state = switch (inputMsg) {
+            case INFO -> new InfoState(messageHandler);
+            case START -> new StartState(messageHandler);
+            case STOP -> new StopState(messageHandler);
+            case ADD -> new CreateState(messageHandler);
+            case CHECK -> new CheckState(messageHandler);
+            case MY_BIKE -> new MyBikesState(messageHandler);
             default -> botStateCash.getBotStateMap().get(message.getFrom().getId()) == null ?
-                    BotState.START : botStateCash.getBotStateMap().get(message.getFrom().getId());
+                    new StartState(messageHandler) : botStateCash.getBotStateMap().get(message.getFrom().getId());
         };
-        //we pass the corresponding state to the handler
-        //the corresponding method will be called
-        return messageHandler.handle(message, botState);
-
+        messageHandler.changeState(state);
+        return messageHandler.getState().onClick(message, state);
     }
 
 }

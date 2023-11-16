@@ -1,8 +1,8 @@
 package com.bragin.bike_theft_check.model.handlers;
 
 import com.bragin.bike_theft_check.dto.BikeDto;
-import com.bragin.bike_theft_check.model.BotState;
-import com.bragin.bike_theft_check.model.Status;
+import com.bragin.bike_theft_check.model.states.Status;
+import com.bragin.bike_theft_check.model.states.StartState;
 import com.bragin.bike_theft_check.services.BikeService;
 import com.bragin.bike_theft_check.services.MenuService;
 import com.bragin.bike_theft_check.services.cash.BikeCash;
@@ -27,6 +27,7 @@ public class CallbackQueryHandler {
     private final BikeService bikeService;
     private final MenuService menuService;
     private final MessageSource messageSource;
+    private final MessageHandler messageHandler;
 
     public static final String YES = "buttonYes";
     public static final String NO = "buttonNo";
@@ -85,7 +86,7 @@ public class CallbackQueryHandler {
             try {
                 bikeService.createReport(bikeDto);
                 bikeCash.saveBikeCash(userId, new BikeDto());
-                botStateCash.saveBotState(userId, BotState.START);
+                botStateCash.saveBotState(userId, new StartState(messageHandler));
                 return menuService.getMainMenuMessage(chatId, message, userId);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -93,7 +94,7 @@ public class CallbackQueryHandler {
         } else {
             bikeService.update(bikeDto);
             bikeCash.saveBikeCash(userId, new BikeDto());
-            botStateCash.saveBotState(userId, BotState.START);
+            botStateCash.saveBotState(userId, new StartState(messageHandler));
             return menuService.getMainMenuMessage(chatId, message, userId);
         }
     }

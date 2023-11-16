@@ -8,13 +8,13 @@ class BikeCashSpec extends Specification {
 
     def "Should saved bikeDto and user id" () {
         given:
-            def bike = new BikeDto()
+            final def bike = new BikeDto()
             bike.setFrameNumber("123")
-            def userId = 1L
+            final def userId = 1L
         when:
             bikeCash.saveBikeCash(userId, bike)
         then:
-            def result = bikeCash.bikeMap.get(userId)
-            bike.equals(result)
+            final def result = bikeCash.bikeMap.get(userId)
+            bike == result
     }
 }
